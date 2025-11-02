@@ -1,8 +1,10 @@
 <template>
   <div class="category-card" :style="{ backgroundColor: bgColor }">
-    <img :src="image" alt="category image" />
-    <h3>{{ title }}</h3>
-    <p>{{ items }} items</p>
+    <img :src="image" :alt="title" class="category-image" />
+    <div class="category-info">
+      <h3 class="category-title">{{ title }}</h3>
+      <p class="category-items">{{ items }} items</p>
+    </div>
   </div>
 </template>
 
@@ -17,30 +19,60 @@ defineProps({
 
 <style scoped>
 .category-card {
-  width: 136px;
-  height: 177px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
   border-radius: 10px;
-  border: 1px solid #eee;
   text-align: center;
-  padding: 10px;
-  transition: 0.3s;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 }
-.category-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-.category-card img {
-  width: 80px;
-  height: 80px;
+
+.category-image {
+  width: 60px;
+  height: 60px;
   object-fit: contain;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
-.category-card h3 {
+
+.category-title {
   font-size: 14px;
+  font-weight: 600;
   color: #253d4e;
+  margin: 0 0 5px 0;
+  line-height: 1.2;
 }
-.category-card p {
+
+.category-items {
   font-size: 12px;
   color: #7e7e7e;
+  margin: 0;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .category-card {
+    padding: 10px;
+  }
+  
+  .category-image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .category-title {
+    font-size: 12px;
+  }
+  
+  .category-items {
+    font-size: 11px;
+  }
 }
 </style>

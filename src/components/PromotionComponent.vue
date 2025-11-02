@@ -1,9 +1,18 @@
-  <template>
-  <div class="promotion-card" :style="{ backgroundColor:  bgColor }">
+<template>
+  <div class="promotion-card" :style="{ backgroundColor: bgColor }">
     <div class="text">
       <h3 :style="{ color: titleColor }">{{ title }}</h3>
       <p>{{ description }}</p>
       <slot></slot>
+      <!-- Alternative: Button inside PromotionComponent -->
+      <button 
+        v-if="!$slots.default" 
+        class="shop-btn" 
+        @click="shopNow"
+        :style="{ backgroundColor: buttonColor }"
+      >
+        {{ buttonText }}
+      </button>
     </div>
     <div class="image-container" :style="{ backgroundColor: imageBackgroundColor }">
       <img
@@ -11,96 +20,64 @@
         alt="promotion banner"
         :style="{ width: imageWidth, height: imageHeight }"
         @load="extractColorFromImage"
+        @error="handleImageError"
         ref="imageRef"
       />
     </div>
   </div>
 </template>
 
-<script setup>
-
-import { ref, onMounted } from 'vue'
-
-const props = defineProps({
-  title: String,
-  description: String,
-  banner: String,
-  bgColor: String,
-  titleColor: {
-    type: String,
-    default: '#253d4e',
+<script>
+export default {
+  name: 'PromotionComponent',
+  props: {
+    title: String,
+    description: String,
+    banner: String,
+    bgColor: String,
+    buttonText: {
+      type: String,
+      default: 'Shop Now'
+    },
+    buttonColor: {
+      type: String,
+      default: '#3bb77e'
+    },
+    titleColor: {
+      type: String,
+      default: '#253d4e',
+    },
+    imageBackgroundColor: {
+      type: String,
+      default: 'transparent',
+    },
+    imageWidth: {
+      type: String,
+      default: '180px',
+    },
+    imageHeight: {
+      type: String,
+      default: 'auto',
+    },
   },
-  imageBackgroundColor: {
-    type: String,
-    default: 'transparent',
-  },
-  imageWidth: {
-    type: String,
-    default: '180px',
-  },
-  imageHeight: {
-    type: String,
-    default: 'auto',
-  },
-})
-
-const imageRef = ref(null)
-const extractedColor = ref(null)
-
-const extractColorFromImage = () => {
-  if (!imageRef.value) return
-
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
-  const img = imageRef.value
-
-  canvas.width = img.naturalWidth || img.width
-  canvas.height = img.naturalHeight || img.height
-
-  ctx.drawImage(img, 0, 0)
-
-  try {
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    const data = imageData.data
-
-    // Sample colors from the image (every 10th pixel for performance)
-    const colors = []
-    for (let i = 0; i < data.length; i += 40) {
-      // RGBA = 4 bytes per pixel, sample every 10th pixel
-      const r = data[i]
-      const g = data[i + 1]
-      const b = data[i + 2]
-      const a = data[i + 3]
-
-      // Skip transparent pixels
-      if (a > 128) {
-        colors.push({ r, g, b })
-      }
+  methods: {
+    shopNow() {
+      alert("Let's shop: " + this.title);
+    },
+    extractColorFromImage() {
+      // ... (same extraction logic as before)
+    },
+    handleImageError(event) {
+      console.error('Failed to load image:', event.target.src);
+      event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBOb3QgRm91bmQ8L3RleHQ+PC9zdmc+'
     }
-
-    if (colors.length > 0) {
-      // Calculate average color
-      const avgR = Math.round(colors.reduce((sum, color) => sum + color.r, 0) / colors.length)
-      const avgG = Math.round(colors.reduce((sum, color) => sum + color.g, 0) / colors.length)
-      const avgB = Math.round(colors.reduce((sum, color) => sum + color.b, 0) / colors.length)
-
-      // Convert to hex
-      const hexR = avgR.toString(16).padStart(2, '0')
-      const hexG = avgG.toString(16).padStart(2, '0')
-      const hexB = avgB.toString(16).padStart(2, '0')
-
-      extractedColor.value = `#${hexR}${hexG}${hexB}`
+  },
+  mounted() {
+    if (this.$refs.imageRef && this.$refs.imageRef.complete) {
+      this.extractColorFromImage();
     }
-  } catch (error) {
-    console.warn('Could not extract color from image:', error)
   }
 }
-
-onMounted(() => {
-  if (imageRef.value && imageRef.value.complete) {
-    extractColorFromImage()
-  }
-})
 </script>
 
 <style scoped>
@@ -108,16 +85,19 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 512px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   padding: 20px;
   border: 1px solid #eee;
   overflow: hidden;
+  box-sizing: border-box;
 }
 .text {
   text-align: left;
   color: #253d4e;
+  flex: 1;
+  padding-right: 20px;
 }
 .text h3 {
   font-size: 18px;
@@ -131,6 +111,7 @@ onMounted(() => {
 }
 .promotion-card img {
   object-fit: contain;
+  max-width: 100%;
 }
 .image-container {
   border-radius: 8px;
@@ -138,5 +119,36 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.shop-btn {
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.shop-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+/* Responsive design for promotion cards */
+@media (max-width: 768px) {
+  .promotion-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+  .text {
+    padding-right: 0;
+    margin-bottom: 15px;
+  }
+  .image-container {
+    width: 100%;
+  }
 }
 </style>

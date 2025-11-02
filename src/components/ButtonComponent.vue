@@ -1,17 +1,27 @@
 <template>
-  <button class="shop-btn" :style="{ backgroundColor: color }">
+  <button class="shop-btn" :style="{ backgroundColor: color }" @click="handleClick">
     {{ label }}
   </button>
 </template>
 
-<script setup>
-defineProps({
-  label: String,
-  color: {
-    type: String,
-    default: '#3bb77e'
+<script>
+export default {
+  name: 'ButtonComponent',
+  props: {
+    label: String,
+    color: {
+      type: String,
+      default: '#3bb77e',
+    },
+    title: String,
+  },
+  methods: {
+    handleClick() {
+      // Emit custom event instead of showing alert directly
+      this.$emit('click');
+    }
   }
-})
+}
 </script>
 
 <style scoped>
@@ -26,5 +36,6 @@ defineProps({
 }
 .shop-btn:hover {
   opacity: 0.85;
+  transform: translateY(-2px);
 }
 </style>
