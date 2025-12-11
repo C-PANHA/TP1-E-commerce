@@ -1,5 +1,8 @@
 <template>
   <div class="app">
+    <!-- Header -->
+    <HeaderComponent @search="handleSearch" @subscribe="handleSubscribe" />
+
     <!-- Loading State -->
     <div v-if="loading" class="loading">
       <div class="spinner"></div>
@@ -112,6 +115,7 @@ import ButtonComponent from './components/ButtonComponent.vue'
 import StoreDemo from './components/StoreDemo.vue'
 import MultiGetter from './components/MultiGetter.vue'
 import ProductComponent from './components/ProductComponent.vue'
+import HeaderComponent from './components/HeaderComponent.vue'
 import { useProductStore } from '@/stores/productStore.js'
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -135,6 +139,7 @@ import logo3 from './assets/images/promotions/logo3.png'
 export default {
   name: 'App',
   components: {
+    HeaderComponent,
     CategoryComponent,
     PromotionComponent,
     ButtonComponent,
@@ -275,6 +280,27 @@ export default {
     },
   },
   methods: {
+    handleSearch(query) {
+      console.log('Search query:', query)
+      // Implement search functionality here
+      Swal.fire({
+        title: 'Search',
+        text: `Searching for: ${query}`,
+        icon: 'info',
+        confirmButtonColor: '#3bb77e',
+      })
+    },
+
+    handleSubscribe(email) {
+      console.log('Newsletter subscription:', email)
+      Swal.fire({
+        title: 'Success!',
+        text: `You've been subscribed with: ${email}`,
+        icon: 'success',
+        confirmButtonColor: '#3bb77e',
+      })
+    },
+
     async testAPIConnectivity() {
       this.apiTestResult = {}
       const endpoints = ['products', 'categories', 'groups', 'promotions']
@@ -536,7 +562,7 @@ export default {
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
-  padding: 30px;
+  padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
@@ -574,7 +600,7 @@ export default {
 .main-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0;
+  padding: 30px;
 }
 
 /* Section Headers - Enhanced */

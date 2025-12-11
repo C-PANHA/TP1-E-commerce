@@ -1,0 +1,81 @@
+/* Global Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    'Poppins',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  background-color: #f7f8fa;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+#app {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Enhanced SweetAlert2 Styles */
+.custom-swal-popup {
+  font-family:
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Roboto',
+    sans-serif !important;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 2px solid #e8f5e8;
+}
+
+.custom-swal-title {
+  font-family:
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Roboto',
+    sans-serif !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #253d4e !important;
+  margin-bottom: 10px !important;
+}
+
+.custom-swal-confirm {
+  font-family:
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Roboto',
+    sans-serif !important;
+  border-radius: 10px !important;
+  padding: 12px 30px !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+
+.swal2-success {
+  border-color: #3bb77e !important;
+}
+
+.swal2-success [class^='swal2-success-line'] {
+  background-color: #3bb77e !important;
+}
+
+.swal2-success .swal2-success-ring {
+  border-color: rgba(59, 183, 126, 0.3) !important;
+}
