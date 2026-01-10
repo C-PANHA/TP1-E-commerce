@@ -62,15 +62,26 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Get the author associated with this user.
      */
-    protected function casts(): array
+    public function author()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasOne(Author::class);
+    }
+
+    /**
+     * Get the audience associated with this user.
+     */
+    public function audience()
+    {
+        return $this->hasOne(Audience::class);
+    }
+
+    /**
+     * Get the comments written by this user through author.
+     */
+    public function comments()
+    {
+        return $this->hasManyThrough(Comment::class, Author::class);
     }
 }
