@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Author extends Model
 {
-    protected $fillable = ['name', 'email', 'bio'];
+    protected $fillable = ['name', 'email', 'bio', 'user_id'];
 
     public function user(): BelongsTo
     {

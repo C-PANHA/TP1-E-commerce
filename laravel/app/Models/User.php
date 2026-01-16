@@ -78,10 +78,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the comments written by this user through author.
+     * Get the comments written by this user.
      */
     public function comments()
     {
-        return $this->hasManyThrough(Comment::class, Author::class);
+        return $this->hasMany(Comment::class);
     }
 }
